@@ -1,0 +1,37 @@
+const int PIN_TO_SENSOR = 2;  // the pin that OUTPUT pin of sensor is connected to  
+int pinStateCurrent   = LOW;  // current state of pin
+int pinStatePrevious  = LOW;  // previous state of pin
+
+void setup() 
+{  Serial.begin(9600);            // initialize serial 
+   // set arduino pin to input mode to read value from OUTPUT pin of sensor  
+   pinMode(PIN_TO_SENSOR, INPUT); 
+}
+void loop() 
+{
+
+ //Configure an Arduino's pin to the digital input mode
+ pinMode(PIN_TO_SENSOR, INPUT);   
+
+ //Read state of sensor's OUTPUT pin 
+ pinStateCurrent = digitalRead(PIN_TO_SENSOR);
+
+ //Detect motion start (pin's state change from HIGH to LOW)
+ pinStatePrevious = pinStateCurrent; // store old state 
+ pinStateCurrent = digitalRead(PIN_TO_SENSOR);   // read new state
+
+ // pin state change: HIGH -> LOW
+ if (pinStatePrevious == HIGH && pinStateCurrent == LOW)
+ {   
+    Serial.println("Motion detected!"); 
+    // we can place an alarm to warn human to come near it
+ }
+ else
+ // pin state change: LOW -> HIGH
+ if (pinStatePrevious == LOW && pinStateCurrent == HIGH) 
+ {   
+   Serial.println("Motion stopped!");
+   // alarm will stop as human presence is not detected
+ }
+
+}
